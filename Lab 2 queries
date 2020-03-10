@@ -1,0 +1,15 @@
+/* Lab 2 - Joining Tables */
+/* 3.) Ans: Gothika (Widescreen) / Queen Of The Damned*/
+select p.name, m.movie_name
+from practice0.people as p, practice0.movies as m, practice0.people_movies as pm
+where p.id = pm.person_id and m.id = pm.movie_id
+order by p.name;
+
+/* 4.) Ans: 39*/
+select p.name, count(m.movie_name) as Movie_Count
+from practice0.people as p, practice0.movies as m, practice0.people_movies as pm
+where p.id = pm.person_id and m.id = pm.movie_id
+group by p.name
+order by Movie_Count desc;
+
+

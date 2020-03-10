@@ -1,0 +1,90 @@
+/* Problem 1 */
+create table delays.problem1a as
+select ORIGIN_AIRPORT, DESTINATION_AIRPORT, DISTANCE 
+from delays.flights;
+
+create table delays.problem1b as
+select p.ORIGIN_AIRPORT, a.AIRPORT, p.DESTINATION_AIRPORT, p.DISTANCE 
+from delays.problem1a as p, delays.airports as a
+where p.ORIGIN_AIRPORT=a.ACODE;
+
+create table delays.problem1c as
+select p.ORIGIN_AIRPORT, p.AIRPORT as 'ORIGIN AIRPORT NAME', p.DESTINATION_AIRPORT, a.AIRPORT as 'DESTINATION AIRPORT NAME', p.DISTANCE
+from delays.problem1b as p, delays.airports as a
+where p.DESTINATION_AIRPORT=a.ACODE
+
+/* Problem 2 */
+select f.ORIGIN_AIRPORT, count(f.ORIGIN_AIRPORT) as COUNT
+from delays.flights as f
+group by f.ORIGIN_AIRPORT
+order by COUNT desc;
+
+/* Problem 3 */
+create table delays.problem3a as
+select *
+from delays.flights as f
+where f.DAY = 1 and f.MONTH = 1 and f.DAY_OF_WEEK = 4;
+
+create table delays.F1 as
+select *
+from delays.problem3a as p
+where p.ORIGIN_AIRPORT = 'BOS';
+
+create table delays.F2 as
+select *
+from delays.problem3a as p
+where p.DESTINATION_AIRPORT = 'SFO';
+
+select F1.AIRLINE as 'AIRLINE 1', F1.FLIGHT_NUMBER as 'FLIGHT NUMBER 1', F1.ORIGIN_AIRPORT as 'ORIGIN AIRPORT 1', F1.DESTINATION_AIRPORT as 'DESTINATION AIRPORT 1', F2.AIRLINE as 'AIRLINE 2', F2.FLIGHT_NUMBER as 'FLIGHT NUMBER 2', F2.ORIGIN_AIRPORT as 'ORIGIN AIRPORT 2', F2.DESTINATION_AIRPORT as 'DESTINATION AIRPORT 2'
+from delays.F1 as F1, delays.F2 as F2
+where F1.DESTINATION_AIRPORT = F2.ORIGIN_AIRPORT
+
+/* Problem 4 */
+create table delays.problem4a as
+select *
+from delays.flights as f
+where f.CANCELLED = 1;
+
+select p.ORIGIN_AIRPORT as ORIGIN_AIRPORT, p.DESTINATION_AIRPORT as DESTINATION_AIRPORT, count(*) as 'Cancelled Flights'
+from delays.problem4a as p
+group by p.ORIGIN_AIRPORT, p.DESTINATION_AIRPORT
+order by count(*) desc;
+
+/* Problem 5 */ /* ANS: Southwest Airlines Co. - 6122 */
+create table delays.problem5a as
+select *
+from delays.flights as f
+where f.CANCELLATION_REASON = 'A';
+
+create table delays.problem5b as
+select p.AIRLINE as 'AIRLINE CODE', a.AIRLINE as 'AIRLINE NAME', count(*) as 'COUNT'
+from delays.problem5a as p, delays.airlines as a
+where p.AIRLINE = a.CODE
+group by p.AIRLINE
+order by count(*) desc;
+
+/* Problem 6 */ /* ANS: 4 (Thursday) - 16.32 avg taxi out */
+select f.day_of_week as 'Day of the Week', avg(f.TAXI_OUT) as 'Average Taxi Out'
+from delays.flights as f
+group by f.day_of_week
+order by avg(f.TAXI_OUT) desc;
+
+/* Problem 7 */
+select f.AIRLINE as 'AIRLINE', sum(f.DEPARTURE_DELAY) as 'DELAY' 
+from delays.flights as f
+group by f.AIRLINE
+order by sum(f.DEPARTURE_DELAY);
+
+/* Problem 8 */
+create table delays.problem8a as
+select f.MONTH as Month, f.DAY as Day, sum(f.CANCELLED) as CANCELLED, f.AIRLINE as AIRLINE_CODE
+from delays.flights as f
+group by f.MONTH, f.DAY, f.AIRLINE;
+
+create table delays.problem8b as
+select *
+from delays.problem8a as p
+where p.CANCELLED > 100;
+
+select distinct p.AIRLINE_CODE
+from delays.problem8b as p

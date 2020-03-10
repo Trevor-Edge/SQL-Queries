@@ -1,0 +1,18 @@
+/* #3 */
+/* Ans: jOBS */
+select Movie_Name
+from practice0.genres as g, practice0.movies as m
+where g.id = m.genre_id and
+g.genre not in ('Comedy', 'Comdey/Drama','Exercise', 'Fantasy', 'Foreign','Animation',
+'Horror', 'TV Classics', 'Var','War')
+order by Movie_Name desc
+
+/* #4 */
+/* Ans: Ann Worthington*/
+/* Movie_ID, people names */
+select m.movie_name, p.name, m.id
+from practice0.movies as m, practice0.people as p, practice0.people_movies as pm
+where pm.person_id = p.id and pm.movie_id = m.id and m.id in  ('20372', '8727', '31670')
+order by p.name asc; 
+
+

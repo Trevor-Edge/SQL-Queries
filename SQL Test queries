@@ -1,0 +1,91 @@
+/* SQL Exam */
+/* #1 */ /* ANS: 59 */
+select count(*) as CustomersCount
+    from test.customer;
+    
+/* #2 */ /* ANS: 2 */
+select count(*) as customers, city
+    from test.customer
+    where city = 'London';
+    
+/* #3 */ /* ANS: 8 */
+select count(*) as GmailAccts
+    from test.customer
+    where email like '%@gmail.com';
+    
+/* #4 */ 
+select albumID as AlbumID, title as Title
+    from test.album
+    where title like 'K%'
+    order by albumID desc;
+    
+/* #5 */
+select alb.albumID as AlbumID, alb.title as Title, art.name as ArtistName
+    from test.album as alb, test.artist as art
+    where alb.artistID = art.artistID and Title like 'M%'
+    order by albumID desc;
+    
+/* #6 */
+select g.genreID, avg(UnitPrice) as AvgUnitPrice
+    from test.track as t, test.genre as g
+    where t.genreID = g.genreID
+    group by g.genreID
+    order by g.genreID desc;
+    
+/* #7 */
+select c.city
+    from test.customer as c
+UNION
+select e.city
+    from test.employee3 as e;
+    
+/* #8 */
+create table test.cust_empl as
+select c.city
+    from test.customer as c
+UNION
+select e.city
+    from test.employee3 as e;
+    
+select count(*)
+    from test.cust_empl;
+    
+/* #9 */
+select BillingCity, avg(Total) as AvgTotal
+    from test.Invoice
+    group by BillingCity
+    having avg(Total) > 6;
+    
+/* #10 */
+create table test.cityavg as
+select BillingCity, avg(Total) as AvgTotal
+    from test.Invoice
+    group by BillingCity; 
+    
+select BillingCity, AvgTotal
+    from test.cityavg
+    where AvgTotal > (select avg(Total)
+                            from test.Invoice)
+    order by AvgTotal desc;
+    
+/* #11 */
+select art.name, count(Title)
+    from test.album as alb, test.artist as art 
+    where alb.artistID = art.artistID
+    group by art.name
+    order by count(Title) desc;
+    
+/* #12 */
+create table test.all_data as
+    select t.name as TrackName, g.name as Genre, mt.name as MediaType
+        from test.track as t, test.genre as g, test.mediatype as mt
+        where t.genreID = g.genreID and t.mediatypeID = mt.mediatypeID
+        order by t.name desc;
+
+/* 13 */
+insert into test.Artist
+(ArtistId, name)
+VALUES
+(277, 'It Depends Music');
+
+

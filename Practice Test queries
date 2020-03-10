@@ -1,0 +1,75 @@
+/* Practice Exam queries */
+/* 1 */ /* ANS: 36878 */
+select count(*)
+    from practice0.movies;
+
+/* 2 */ /* ANS: 13271 */
+select count(*)
+    from practice0.movies
+    where dvd_price > 20;
+
+/* 3 */ /* ANS: 2 people*/
+select name, id
+    from practice0.people
+    where name like 'Francisco%';
+    
+/* 4 */ /* Create a table with the person's name and each movie they own */
+select p.name as Name, m.movie_name as Movie_name
+    from practice0.movies as m, practice0.people as p, practice0.people_movies as pm
+    where m.id = pm.movie_id and p.id = pm.person_id
+    order by p.name;
+    
+/* 5 */ /* ANS: Annis Kahn owns 39 movies */
+select p.name as Name, count(m.movie_name) as Movies_Owned
+    from practice0.people as p, practice0.movies as m, practice0.people_movies as pm
+    where p.id = pm.person_id and m.id = pm.movie_id
+    group by p.name
+    order by count(m.movie_name) desc;
+
+/* #6 */
+select rating, avg(dvd_price) as AvgPrice
+    from practice0.movies
+/* getting rid of missing rows with the line below if you want to */
+/* do not add a space in the quotes in the next line */
+    where rating  <> ''
+    group by rating;
+
+/* 7 */
+select rating, avg(dvd_price) as AvgPrice
+    from practice0.movies
+    group by rating
+    having avg(dvd_price) > 20;
+
+/* 8 */ /* 982712.78 */
+select count(*), sum(dvd_price) as Grand_Total
+    from practice0.movies;
+    
+/* 9 */
+select id, dvd_price as current_price, 0.5*dvd_price as half_price
+    from practice0.movies;
+    
+/* 10 */ /* ANS: 6181 movies are not owned by anyone */
+select movie_name
+    from practice0.movies
+EXCEPT
+select m.movie_name
+    from practice0.movies as m, practice0.people as p, practice0.people_movies as pm
+    where p.id = pm.person_id and m.id = pm.movie_id;
+    
+/* 11 */
+create table practice0.studiomovies as
+    select s.studio_name, count(movie_name) as Movie
+        from practice0.movies as m, practice0.studios as s
+        where m.studio_id = s.id
+        group by s.studio_name;
+        
+/* 12 */
+insert into practice0.people
+(id, name)
+VALUES
+(6000, 'Jack Smith');
+
+select id, name
+    from practice0.people
+    where id = 6000;
+        

@@ -1,0 +1,14 @@
+/* Lab 4 */
+/* #3 Ans: 2*/
+select m.id
+from practice0.movies as m
+except
+select pm.movie_id
+from practice0.people_movies as pm;
+
+/* #4 Ans: 6181*/
+select m.id
+from practice0.movies as m
+except
+select pm.movie_id
+from practice0.people_movies as pm;

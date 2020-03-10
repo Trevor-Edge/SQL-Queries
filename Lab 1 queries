@@ -1,0 +1,10 @@
+select count(*) as Count
+from exercise.education_levels;
+/* Answer: 16 */
+
+
+select count(id) as count, country_id
+from exercise.records
+group by country_id
+order by count desc;
+/* Answer: 43832 */
